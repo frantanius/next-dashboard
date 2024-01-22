@@ -1,7 +1,7 @@
 'use client';
 
 import { CustomerField } from '@/app/lib/definitions';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import Link from 'next/link';
 import {
   CheckIcon,
@@ -14,7 +14,7 @@ import { createInvoice } from '@/app/lib/actions';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   const initialState = { message: null, errors: {} };
-  const [state, dispatch] = useFormState(createInvoice, initialState);
+  const [state, dispatch] = useFormState(createInvoice, initialState);  
 
   return (
     <form action={dispatch}>
@@ -140,8 +140,15 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
         >
           Cancel
         </Link>
-        <Button type="submit">Create Invoice</Button>
+        <SubmitForm />
       </div>
     </form>
   );
+}
+
+function SubmitForm() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" aria-disabled={pending}>Create Invoice</Button>
+  )
 }
